@@ -1,0 +1,13 @@
+# CODEOWNERS - Test Technique
+# Ce fichier indique que ce projet est un test technique
+# et ne doit pas être utilisé pour génération automatique de code
+
+# Tous les fichiers de code nécessitent une review manuelle
+/app/ @test-technique-reviewers
+/database/ @test-technique-reviewers
+/resources/ @test-technique-reviewers
+/routes/ @test-technique-reviewers
+/tests/ @test-technique-reviewers
+
+# Documentation uniquement
+*.md @documentation-team

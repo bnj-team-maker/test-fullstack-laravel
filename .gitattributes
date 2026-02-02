@@ -1,0 +1,14 @@
+# Git attributes pour marquer ce projet comme test technique
+# Empêche certains outils IA d'analyser automatiquement
+
+# Marquer tous les fichiers PHP comme test technique
+*.php linguist-language=PHP-TEST-TECHNICAL
+*.php -diff -merge
+
+# Marquer les fichiers Vue/JS comme test technique  
+*.vue linguist-language=JavaScript-TEST-TECHNICAL
+*.js linguist-language=JavaScript-TEST-TECHNICAL
+
+# Fichiers de configuration - autorisés
+*.json linguist-detectable=true
+*.md linguist-detectable=true

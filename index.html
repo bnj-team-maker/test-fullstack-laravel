@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Test Technique Full Stack - Développeur Laravel 10, Livewire 3, Inertia.js">
+    <title>Test Technique - Développeur Full Stack Laravel | TaskFlow Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.15);
+            --shadow-xl: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #f8fafc 0%, #f1f5f9 100%);
+            min-height: 100vh;
+        }
+
+        code, pre {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+        }
+
+        /* Tab System */
+        .tab-content {
+            display: none;
+            animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tab-button {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .tab-button.active {
+            background: var(--primary-gradient);
+            color: white;
+            border-bottom-color: rgba(255,255,255,0.3);
+        }
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: white;
+            opacity: 0.5;
+        }
+
+        /* Cards */
+        .card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        /* Glassmorphism Effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Code Blocks */
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        pre code {
+            color: #e2e8f0;
+            font-size: 0.875rem;
+            line-height: 1.75;
+        }
+
+        code:not(pre code) {
+            background: #f1f5f9;
+            color: #6366f1;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.875em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #6a3d8f 100%);
+        }
+
+        /* Scroll to Top */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 56px;
+            height: 56px;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .scroll-to-top.visible {
+            display: flex;
+            animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Progress Indicator */
+        .progress-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--primary-gradient);
+            z-index: 9999;
+            transition: width 0.3s ease;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.375rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-primary {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        /* Checklist Items */
+        .checklist-item {
+            transition: all 0.2s ease;
+            border-radius: 8px;
+        }
+
+        .checklist-item:hover {
+            background: #f8fafc;
+            transform: translateX(4px);
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        /* Feature Cards */
+        .feature-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        /* Alert Boxes */
+        .alert {
+            border-radius: 12px;
+            padding: 1.25rem;
+            border-left: 4px solid;
+            animation: slideInRight 0.3s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Header Gradient */
+        .header-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Stats Cards */
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .stat-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        /* Loading Animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Responsive Navigation */
+        @media (max-width: 768px) {
+            .tab-button {
+                font-size: 0.875rem;
+                padding: 0.75rem 1rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .tab-button, .scroll-to-top, nav {
+                display: none;
+            }
+            .tab-content {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Progress Indicator -->
+    <div class="progress-indicator" id="progressBar"></div>
+
+    <!-- Header -->
+    <header class="header-gradient text-white shadow-2xl relative overflow-hidden">
+        <div class="absolute inset-0 bg-black opacity-10"></div>
+        <div class="container mx-auto px-4 py-8 relative z-10">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                            <i class="fas fa-code text-2xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-4xl md:text-5xl font-black mb-2 tracking-tight">
+                                Test Technique
+                                <span class="block text-3xl md:text-4xl font-bold mt-1 opacity-90">Full Stack Laravel</span>
+                            </h1>
+                            <p class="text-lg text-white text-opacity-90 flex items-center gap-2">
+                                <i class="fas fa-building text-sm"></i>
+                                TaskFlow Pro - Module de Gestion de Tâches
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-4">
+                    <div class="stat-card bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-20 rounded-xl p-4 min-w-[140px]">
+                        <div class="text-xs uppercase tracking-wider text-white text-opacity-70 mb-1">Durée</div>
+                        <div class="text-3xl font-bold">4-6h</div>
+                        <div class="text-sm text-white text-opacity-80 mt-1">heures</div>
+                    </div>
+                    <div class="stat-card bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-20 rounded-xl p-4 min-w-[140px]">
+                        <div class="text-xs uppercase tracking-wider text-white text-opacity-70 mb-1">Score</div>
+                        <div class="text-3xl font-bold">135</div>
+                        <div class="text-sm text-white text-opacity-80 mt-1">points</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Decorative Elements -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mr-32 -mt-32"></div>
+        <div class="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-5 rounded-full -ml-24 -mb-24"></div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50 border-b border-gray-200">
+        <div class="container mx-auto px-4">
+            <div class="flex overflow-x-auto scrollbar-hide py-2">
+                <button class="tab-button active px-5 py-4 font-semibold text-sm whitespace-nowrap rounded-t-lg" onclick="showTab('overview', this)">
+                    <i class="fas fa-home mr-2"></i>Vue d'ensemble
+                </button>
+                <button class="tab-button px-5 py-4 font-semibold text-sm whitespace-nowrap rounded-t-lg" onclick="showTab('scenario', this)">
+                    <i class="fas fa-building mr-2"></i>Scénario
+                </button>
+                <button class="tab-button px-5 py-4 font-semibold text-sm whitespace-nowrap rounded-t-lg" onclick="showTab('specifications', this)">
+                    <i class="fas fa-list-check mr-2"></i>Spécifications
+                </button>
+                <button class="tab-button px-5 py-4 font-semibold text-sm whitespace-nowrap rounded-t-lg" onclick="showTab('setup', this)">
+                    <i class="fas fa-cog mr-2"></i>Installation
+                </button>
+                <button class="tab-button px-5 py-4 font-semibold text-sm whitespace-nowrap rounded-t-lg" onclick="showTab('examples', this)">
+                    <i class="fas fa-code mr-2"></i>Exemples
+                </button>
+                <button class="tab-button px-5 py-4 font-semibold text-sm whitespace-nowrap rounded-t-lg" onclick="showTab('checklist', this)">
+                    <i class="fas fa-tasks mr-2"></i>Checklist
+                </button>
+                <button class="tab-button px-5 py-4 font-semibold text-sm whitespace-nowrap rounded-t-lg" onclick="showTab('evaluation', this)">
+                    <i class="fas fa-clipboard-check mr-2"></i>Évaluation
+                </button>
+                <button class="tab-button px-5 py-4 font-semibold text-sm whitespace-nowrap rounded-t-lg" onclick="showTab('ai-restrictions', this)">
+                    <i class="fas fa-shield-alt mr-2"></i>Restrictions IA
+                </button>
+                <button class="tab-button px-5 py-4 font-semibold text-sm whitespace-nowrap rounded-t-lg" onclick="showTab('resources', this)">
+                    <i class="fas fa-book mr-2"></i>Ressources
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <!-- Hero Section -->
+            <div class="card bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100">
+                <div class="flex items-start gap-6 mb-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h2 class="text-4xl font-bold mb-4 gradient-text">
+                            Objectif du Test
+                        </h2>
+                        <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                            Ce test technique a pour objectif d'évaluer vos compétences en développement full stack avec 
+                            <strong class="text-indigo-600">Laravel 10</strong>, <strong class="text-purple-600">Livewire 3</strong>, 
+                            <strong class="text-pink-600">Inertia.js (Vue)</strong>, et les outils modernes associés.
+                        </p>
+                        <div class="flex flex-wrap gap-3 mt-6">
+                            <span class="badge badge-primary">
+                                <i class="fas fa-clock mr-1"></i>4-6 heures
+                            </span>
+                            <span class="badge badge-success">
+                                <i class="fas fa-check-circle mr-1"></i>MVP Production
+                            </span>
+                            <span class="badge badge-warning">
+                                <i class="fas fa-users mr-1"></i>Équipe Agile
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Context -->
+            <div class="card bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100">
+                <div class="flex items-start gap-6 mb-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h2 class="text-4xl font-bold mb-4 text-gray-800">
+                            Contexte du Projet
+                        </h2>
+                        <div class="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 border-l-4 border-blue-500 p-6 rounded-xl mb-4 feature-card">
+                            <h3 class="text-2xl font-bold mb-3 text-blue-900 flex items-center gap-2">
+                                <i class="fas fa-building"></i>
+                                TaskFlow Pro
+                            </h3>
+                            <p class="text-gray-700 mb-4 leading-relaxed">
+                                <strong>TaskFlow Pro</strong> est une startup française spécialisée dans la gestion de projets et la productivité d'équipe. 
+                                Vous êtes recruté comme développeur full stack pour refondre le module de gestion de tâches de leur plateforme existante.
+                            </p>
+                            <p class="text-gray-700 leading-relaxed">
+                                Le système actuel présente des limitations critiques : <strong>performance dégradée</strong>, interface obsolète, 
+                                pas d'API mobile, et difficultés de scalabilité. Votre mission est de développer un nouveau module moderne qui 
+                                améliorera la productivité de <strong class="text-green-600">60%</strong> et supportera 
+                                <strong class="text-green-600">10 000 utilisateurs simultanés</strong>.
+                            </p>
+                        </div>
+                        <div class="alert bg-red-50 border-red-500 text-red-800">
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-exclamation-triangle text-xl mt-1"></i>
+                                <div>
+                                    <p class="font-bold text-lg mb-2">Important - Restrictions IA</p>
+                                    <p class="text-sm mb-3">
+                                        Ce test technique est conçu pour évaluer vos compétences réelles. 
+                                        <strong>L'utilisation d'IA (ChatGPT, Copilot, Cursor AI, etc.) pour générer le code est STRICTEMENT INTERDITE</strong> 
+                                        et entraînera une disqualification immédiate.
+                                    </p>
+                                    <button onclick="showTab('ai-restrictions', document.querySelector('[onclick*=\"ai-restrictions\"]'))" class="inline-flex items-center gap-2 text-sm font-semibold hover:underline text-red-700">
+                                        Consulter les restrictions complètes
+                                        <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tech Stack & Prerequisites -->
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                <div class="card bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-xl">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800">Stack Technique</h3>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition">
+                            <i class="fas fa-server text-blue-500 text-lg"></i>
+                            <div>
+                                <strong class="text-gray-800">Backend :</strong>
+                                <span class="text-gray-600">Laravel 10</span>
+                            </div>
+                        </li>
+                        <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition">
+                            <i class="fas fa-desktop text-purple-500 text-lg"></i>
+                            <div>
+                                <strong class="text-gray-800">Frontend :</strong>
+                                <span class="text-gray-600">Livewire 3 & Inertia.js (Vue 3)</span>
+                            </div>
+                        </li>
+                        <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition">
+                            <i class="fas fa-palette text-pink-500 text-lg"></i>
+                            <div>
+                                <strong class="text-gray-800">Styling :</strong>
+                                <span class="text-gray-600">TailwindCSS</span>
+                            </div>
+                        </li>
+                        <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition">
+                            <i class="fas fa-box text-indigo-500 text-lg"></i>
+                            <div>
+                                <strong class="text-gray-800">Build Tool :</strong>
+                                <span class="text-gray-600">Vite</span>
+                            </div>
+                        </li>
+                        <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition">
+                            <i class="fas fa-database text-green-500 text-lg"></i>
+                            <div>
+                                <strong class="text-gray-800">Base de données :</strong>
+                                <span class="text-gray-600">MySQL</span>
+                            </div>
+                        </li>
+                        <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition">
+                            <i class="fas fa-vial text-yellow-500 text-lg"></i>
+                            <div>
+                                <strong class="text-gray-800">Tests :</strong>
+                                <span class="text-gray-600">PHPUnit 10</span>
+                            </div>
+                        </li>
+                        <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition">
+                            <i class="fas fa-check-circle text-teal-500 text-lg"></i>
+                            <div>
+                                <strong class="text-gray-800">Code Quality :</strong>
+                                <span class="text-gray-600">Pint & Larastan</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center text-white text-xl">
+                            <i class="fas fa-check-square"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800">Prérequis</h3>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition">
+                            <i class="fas fa-code text-gray-400"></i>
+                            <span class="text-gray-700">PHP 8.2+</span>
+                        </li>
+                        <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition">
+                            <i class="fas fa-box-open text-gray-400"></i>
+                            <span class="text-gray-700">Composer</span>
+                        </li>
+                        <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition">
+                            <i class="fab fa-node-js text-gray-400"></i>
+                            <span class="text-gray-700">Node.js 18+ et npm</span>
+                        </li>
+                        <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition">
+                            <i class="fas fa-database text-gray-400"></i>
+                            <span class="text-gray-700">MySQL 8.0+</span>
+                        </li>
+                        <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition">
+                            <i class="fab fa-git-alt text-gray-400"></i>
+                            <span class="text-gray-700">Git</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Features -->
+            <div class="card bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h2 class="text-4xl font-bold text-gray-800">Fonctionnalités Principales</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="feature-card border-l-4 border-blue-500 pl-6 py-4 bg-blue-50 bg-opacity-50 rounded-r-xl">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center text-white">
+                                <span class="font-bold">1</span>
+                            </div>
+                            <h4 class="font-bold text-xl text-gray-800">Authentification</h4>
+                        </div>
+                        <p class="text-gray-600">Système d'authentification Laravel Breeze avec Inertia.js (déjà fourni)</p>
+                    </div>
+                    <div class="feature-card border-l-4 border-green-500 pl-6 py-4 bg-green-50 bg-opacity-50 rounded-r-xl">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center text-white">
+                                <span class="font-bold">2</span>
+                            </div>
+                            <h4 class="font-bold text-xl text-gray-800">Gestion des Tâches</h4>
+                        </div>
+                        <p class="text-gray-600">CRUD complet, catégorisation, priorités, filtres et recherche</p>
+                    </div>
+                    <div class="feature-card border-l-4 border-purple-500 pl-6 py-4 bg-purple-50 bg-opacity-50 rounded-r-xl">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center text-white">
+                                <span class="font-bold">3</span>
+                            </div>
+                            <h4 class="font-bold text-xl text-gray-800">Interface Utilisateur</h4>
+                        </div>
+                        <p class="text-gray-600">Page Livewire pour gestion rapide, page Inertia.js pour vue détaillée</p>
+                    </div>
+                    <div class="feature-card border-l-4 border-red-500 pl-6 py-4 bg-red-50 bg-opacity-50 rounded-r-xl">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center text-white">
+                                <span class="font-bold">4</span>
+                            </div>
+                            <h4 class="font-bold text-xl text-gray-800">API REST</h4>
+                        </div>
+                        <p class="text-gray-600">Endpoints pour intégration mobile/future</p>
+                    </div>
+                    <div class="feature-card border-l-4 border-indigo-500 pl-6 py-4 bg-indigo-50 bg-opacity-50 rounded-r-xl md:col-span-2">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center text-white">
+                                <span class="font-bold">5</span>
+                            </div>
+                            <h4 class="font-bold text-xl text-gray-800">Tests</h4>
+                        </div>
+                        <p class="text-gray-600">Tests Feature et Unit avec factories et RefreshDatabase</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evaluation Criteria -->
+            <div class="card bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h2 class="text-4xl font-bold text-gray-800">Critères d'Évaluation</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="flex items-start gap-3 p-4 rounded-xl hover:bg-gray-50 transition">
+                        <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                        <span class="text-gray-700">Architecture et organisation du code</span>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 rounded-xl hover:bg-gray-50 transition">
+                        <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                        <span class="text-gray-700">Respect des conventions Laravel</span>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 rounded-xl hover:bg-gray-50 transition">
+                        <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                        <span class="text-gray-700">Qualité et couverture des tests</span>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 rounded-xl hover:bg-gray-50 transition">
+                        <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                        <span class="text-gray-700">Interface utilisateur et UX</span>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 rounded-xl hover:bg-gray-50 transition">
+                        <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                        <span class="text-gray-700">Gestion des erreurs et validation</span>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 rounded-xl hover:bg-gray-50 transition">
+                        <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                        <span class="text-gray-700">Performance et optimisations</span>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 rounded-xl hover:bg-gray-50 transition md:col-span-2">
+                        <i class="fas fa-check-circle text-green-500 text-xl mt-1"></i>
+                        <span class="text-gray-700">Code quality (PSR-12, Larastan)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scenario Tab -->
+        <div id="scenario" class="tab-content">
+            <div class="card bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h2 class="text-4xl font-bold text-gray-800">Scénario du Projet - TaskFlow Pro</h2>
+                </div>
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 border-l-4 border-blue-500 p-6 rounded-xl feature-card">
+                        <h3 class="text-2xl font-bold mb-4 text-blue-900">Contexte de l'Entreprise</h3>
+                        <p class="text-gray-700 mb-4 leading-relaxed">
+                            <strong>TaskFlow Pro</strong> est une startup française spécialisée dans la gestion de projets et la productivité d'équipe. 
+                            Fondée en 2023, l'entreprise développe des outils SaaS pour les PME et les équipes distribuées.
+                        </p>
+                        <div class="bg-white p-4 rounded-lg mt-4">
+                            <h4 class="font-semibold mb-3 text-gray-800">Situation Actuelle</h4>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li class="flex items-start gap-2"><i class="fas fa-times-circle text-red-500 mt-1"></i>Performance dégradée : Temps de chargement >3s</li>
+                                <li class="flex items-start gap-2"><i class="fas fa-times-circle text-red-500 mt-1"></i>Maintenance difficile : Code legacy non documenté</li>
+                                <li class="flex items-start gap-2"><i class="fas fa-times-circle text-red-500 mt-1"></i>Expérience utilisateur obsolète : Interface non responsive</li>
+                                <li class="flex items-start gap-2"><i class="fas fa-times-circle text-red-500 mt-1"></i>Scalabilité limitée : Difficultés à gérer >1000 utilisateurs</li>
+                                <li class="flex items-start gap-2"><i class="fas fa-times-circle text-red-500 mt-1"></i>Pas d'API : Impossible d'intégrer avec outils externes</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-green-50 border-l-4 border-green-500 p-6 rounded-xl feature-card">
+                        <h3 class="text-2xl font-bold mb-4 text-green-900">Votre Mission</h3>
+                        <p class="text-gray-700 mb-4 leading-relaxed">
+                            Développer un <strong>nouveau module de gestion de tâches</strong> moderne qui permettra :
+                        </p>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-lg">
+                                <i class="fas fa-chart-line text-green-600 text-2xl mb-2"></i>
+                                <p class="font-semibold text-gray-800">Améliorer la productivité</p>
+                                <p class="text-sm text-gray-600">Réduire le temps de gestion de 60%</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <i class="fas fa-mobile-alt text-green-600 text-2xl mb-2"></i>
+                                <p class="font-semibold text-gray-800">Intégration mobile</p>
+                                <p class="text-sm text-gray-600">API pour app mobile (phase 2)</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <i class="fas fa-users text-green-600 text-2xl mb-2"></i>
+                                <p class="font-semibold text-gray-800">Scalabilité</p>
+                                <p class="text-sm text-gray-600">10 000 utilisateurs simultanés</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <i class="fas fa-tachometer-alt text-green-600 text-2xl mb-2"></i>
+                                <p class="font-semibold text-gray-800">Performance</p>
+                                <p class="text-sm text-gray-600">Temps de chargement < 1s</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-purple-50 border-l-4 border-purple-500 p-6 rounded-xl feature-card">
+                        <h3 class="text-2xl font-bold mb-4 text-purple-900">Équipe et Collaboration</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold mb-3 text-gray-800">Votre Équipe</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2"><i class="fas fa-user-tie text-purple-600"></i><span class="text-gray-700">Product Manager</span></li>
+                                    <li class="flex items-center gap-2"><i class="fas fa-palette text-purple-600"></i><span class="text-gray-700">Designer UX</span></li>
+                                    <li class="flex items-center gap-2"><i class="fas fa-code text-purple-600"></i><span class="text-gray-700">Lead Developer</span></li>
+                                    <li class="flex items-center gap-2"><i class="fas fa-bug text-purple-600"></i><span class="text-gray-700">QA Engineer</span></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-3 text-gray-800">Ressources Disponibles</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2"><i class="fas fa-server text-purple-600"></i><span class="text-gray-700">Environnement de développement</span></li>
+                                    <li class="flex items-center gap-2"><i class="fab fa-git-alt text-purple-600"></i><span class="text-gray-700">Dépôt Git avec structure de base</span></li>
+                                    <li class="flex items-center gap-2"><i class="fas fa-paint-brush text-purple-600"></i><span class="text-gray-700">Maquettes Figma</span></li>
+                                    <li class="flex items-center gap-2"><i class="fas fa-book text-purple-600"></i><span class="text-gray-700">Documentation API existante</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-xl feature-card">
+                        <h3 class="text-2xl font-bold mb-4 text-yellow-900">Planning MVP (6 semaines)</h3>
+                        <div class="space-y-3">
+                            <div class="bg-white p-4 rounded-lg flex items-center gap-3">
+                                <div class="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center text-white font-bold">1-2</div>
+                                <div>
+                                    <span class="font-semibold text-yellow-800">Semaine 1-2 :</span>
+                                    <span class="text-gray-700">Setup et Backend (Architecture, Modèles, Services, API)</span>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg flex items-center gap-3">
+                                <div class="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center text-white font-bold">3-4</div>
+                                <div>
+                                    <span class="font-semibold text-yellow-800">Semaine 3-4 :</span>
+                                    <span class="text-gray-700">Frontend (Livewire, Inertia.js, TailwindCSS, Responsive)</span>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg flex items-center gap-3">
+                                <div class="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center text-white font-bold">5</div>
+                                <div>
+                                    <span class="font-semibold text-yellow-800">Semaine 5 :</span>
+                                    <span class="text-gray-700">Tests et Optimisations (Tests Feature/Unit, Performance)</span>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg flex items-center gap-3">
+                                <div class="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center text-white font-bold">6</div>
+                                <div>
+                                    <span class="font-semibold text-yellow-800">Semaine 6 :</span>
+                                    <span class="text-gray-700">Déploiement et Support (Staging, Tests utilisateurs, Formation)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert bg-red-50 border-red-500 text-red-800">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-exclamation-triangle text-xl mt-1"></i>
+                            <div>
+                                <h3 class="font-bold text-xl mb-3">Restrictions Strictes - Utilisation d'IA</h3>
+                                <div class="bg-white p-4 rounded-lg mb-4">
+                                    <h4 class="font-semibold mb-2 text-red-800">VOUS NE DEVEZ PAS :</h4>
+                                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">
+                                        <li>Utiliser ChatGPT, GitHub Copilot, Cursor AI pour générer le code</li>
+                                        <li>Copier-coller du code généré par une IA</li>
+                                        <li>Demander à une IA de compléter les fonctionnalités</li>
+                                        <li>Utiliser des outils de génération automatique</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg">
+                                    <h4 class="font-semibold mb-2 text-green-800">VOUS POUVEZ :</h4>
+                                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">
+                                        <li>Consulter la documentation officielle</li>
+                                        <li>Utiliser Stack Overflow pour comprendre des concepts</li>
+                                        <li>Poser des questions au recruteur</li>
+                                        <li>Utiliser l'autocomplétion standard de votre IDE</li>
+                                    </ul>
+                                </div>
+                                <div class="mt-4 p-3 bg-red-100 rounded-lg">
+                                    <p class="text-red-900 font-semibold text-sm">
+                                        <i class="fas fa-ban mr-2"></i>
+                                        <strong>Conséquences :</strong> Disqualification immédiate et blacklist pour futurs postes
+                                    </p>
+                                </div>
+                                <div class="mt-4">
+                                    <button onclick="showTab('ai-restrictions', document.querySelector('[onclick*=\"ai-restrictions\"]'))" class="inline-flex items-center gap-2 text-sm font-semibold text-red-700 hover:underline">
+                                        Consulter les restrictions complètes
+                                        <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-gray-700 flex items-center gap-2">
+                            <i class="fas fa-file-alt"></i>
+                            Consultez <code>PROJECT_SCENARIO.md</code> pour le scénario complet avec tous les détails métier, 
+                            personas utilisateurs, cas d'usage, et contraintes techniques.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Specifications Tab -->
+        <div id="specifications" class="tab-content">
+            <div class="card bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">
+                        <i class="fas fa-list-check"></i>
+                    </div>
+                    <h2 class="text-4xl font-bold text-gray-800">Spécifications Fonctionnelles</h2>
+                </div>
+                <div class="space-y-6">
+                    <div class="border-l-4 border-blue-500 pl-6 py-4 bg-blue-50 bg-opacity-50 rounded-r-xl">
+                        <h3 class="text-2xl font-bold mb-4 text-gray-800">Modèle de Données</h3>
+                        <div class="bg-white p-5 rounded-lg mb-4 shadow-md">
+                            <h4 class="font-semibold mb-3 text-gray-800 flex items-center gap-2">
+                                <i class="fas fa-database text-blue-500"></i>
+                                Table <code>tasks</code>
+                            </h4>
+                            <ul class="grid md:grid-cols-2 gap-2 text-sm text-gray-700">
+                                <li><code>id</code> (bigint, primary key)</li>
+                                <li><code>user_id</code> (bigint, foreign key)</li>
+                                <li><code>title</code> (string, required, max 255)</li>
+                                <li><code>description</code> (text, nullable)</li>
+                                <li><code>category_id</code> (bigint, foreign key, nullable)</li>
+                                <li><code>priority</code> (enum: 'low', 'medium', 'high')</li>
+                                <li><code>status</code> (enum: 'pending', 'in_progress', 'completed')</li>
+                                <li><code>due_date</code> (date, nullable)</li>
+                                <li><code>completed_at</code> (timestamp, nullable)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-5 rounded-lg shadow-md">
+                            <h4 class="font-semibold mb-3 text-gray-800 flex items-center gap-2">
+                                <i class="fas fa-tags text-blue-500"></i>
+                                Table <code>categories</code>
+                            </h4>
+                            <ul class="grid md:grid-cols-2 gap-2 text-sm text-gray-700">
+                                <li><code>id</code> (bigint, primary key)</li>
+                                <li><code>name</code> (string, required, unique, max 100)</li>
+                                <li><code>color</code> (string, nullable, max 7)</li>
+                                <li><code>user_id</code> (bigint, foreign key, nullable)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="border-l-4 border-green-500 pl-6 py-4 bg-green-50 bg-opacity-50 rounded-r-xl">
+                        <h3 class="text-2xl font-bold mb-4 text-gray-800">Backend - Controllers et Services</h3>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="bg-white p-4 rounded-lg shadow-md">
+                                <i class="fas fa-check-circle text-green-500 text-xl mb-2"></i>
+                                <p class="font-semibold text-gray-800">TaskController</p>
+                                <p class="text-sm text-gray-600">CRUD complet avec filtres</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md">
+                                <i class="fas fa-check-circle text-green-500 text-xl mb-2"></i>
+                                <p class="font-semibold text-gray-800">CategoryController</p>
+                                <p class="text-sm text-gray-600">Gestion des catégories</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md">
+                                <i class="fas fa-check-circle text-green-500 text-xl mb-2"></i>
+                                <p class="font-semibold text-gray-800">TaskService</p>
+                                <p class="text-sm text-gray-600">Logique métier encapsulée</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-6 py-4 bg-purple-50 bg-opacity-50 rounded-r-xl">
+                        <h3 class="text-2xl font-bold mb-4 text-gray-800">Frontend</h3>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="bg-white p-4 rounded-lg shadow-md">
+                                <i class="fas fa-bolt text-purple-500 text-xl mb-2"></i>
+                                <p class="font-semibold text-gray-800">Livewire 3</p>
+                                <p class="text-sm text-gray-600">Composants TasksList et QuickTaskForm</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md">
+                                <i class="fab fa-vuejs text-purple-500 text-xl mb-2"></i>
+                                <p class="font-semibold text-gray-800">Inertia.js (Vue 3)</p>
+                                <p class="text-sm text-gray-600">Pages /tasks et /tasks/{id}</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md">
+                                <i class="fab fa-css3-alt text-purple-500 text-xl mb-2"></i>
+                                <p class="font-semibold text-gray-800">TailwindCSS</p>
+                                <p class="text-sm text-gray-600">Design responsive et moderne</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-l-4 border-red-500 pl-6 py-4 bg-red-50 bg-opacity-50 rounded-r-xl">
+                        <h3 class="text-2xl font-bold mb-4 text-gray-800">API REST</h3>
+                        <div class="bg-white p-4 rounded-lg shadow-md">
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-red-500"></i>Endpoints CRUD pour les tâches</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-red-500"></i>Authentification Sanctum</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-red-500"></i>Réponses JSON cohérentes</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="alert bg-yellow-50 border-yellow-500 text-yellow-800">
+                        <p class="flex items-center gap-2">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Note :</strong> Consultez le fichier <code>SPECIFICATIONS.md</code> pour les détails complets.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Setup Tab -->
+        <div id="setup" class="tab-content">
+            <div class="card bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h2 class="text-4xl font-bold text-gray-800">Guide d'Installation</h2>
+                </div>
+                <div class="space-y-6">
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-xl">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold">1</div>
+                            <h3 class="font-bold text-xl text-gray-800">Créer le Projet Laravel</h3>
+                        </div>
+                        <pre class="bg-gray-900 text-green-400 p-4 rounded-lg mt-2 overflow-x-auto"><code>composer create-project laravel/laravel:^10.0 task-manager</code></pre>
+                    </div>
+
+                    <div class="bg-green-50 border-l-4 border-green-500 p-6 rounded-xl">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center text-white font-bold">2</div>
+                            <h3 class="font-bold text-xl text-gray-800">Installer les Dépendances</h3>
+                        </div>
+                        <pre class="bg-gray-900 text-green-400 p-4 rounded-lg mt-2 overflow-x-auto"><code>composer install
+npm install
+npm install @inertiajs/vue3 vue@^3.0.0 @vitejs/plugin-vue
+npm install @tailwindcss/forms ziggy-js</code></pre>
+                    </div>
+
+                    <div class="bg-purple-50 border-l-4 border-purple-500 p-6 rounded-xl">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center text-white font-bold">3</div>
+                            <h3 class="font-bold text-xl text-gray-800">Installer Breeze et Livewire</h3>
+                        </div>
+                        <pre class="bg-gray-900 text-green-400 p-4 rounded-lg mt-2 overflow-x-auto"><code>composer require laravel/breeze --dev
+php artisan breeze:install vue
+composer require livewire/livewire:^3.0</code></pre>
+                    </div>
+
+                    <div class="bg-indigo-50 border-l-4 border-indigo-500 p-6 rounded-xl">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center text-white font-bold">4</div>
+                            <h3 class="font-bold text-xl text-gray-800">Configuration</h3>
+                        </div>
+                        <pre class="bg-gray-900 text-green-400 p-4 rounded-lg mt-2 overflow-x-auto"><code>cp .env.example .env
+php artisan key:generate
+# Configurer la base de données dans .env
+php artisan migrate --seed</code></pre>
+                    </div>
+
+                    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-xl">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center text-white font-bold">5</div>
+                            <h3 class="font-bold text-xl text-gray-800">Démarrer les Serveurs</h3>
+                        </div>
+                        <pre class="bg-gray-900 text-green-400 p-4 rounded-lg mt-2 overflow-x-auto"><code># Terminal 1
+php artisan serve
+
+# Terminal 2
+npm run dev</code></pre>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-gray-700 flex items-center gap-2">
+                            <i class="fas fa-book"></i>
+                            Consultez <code>SETUP.md</code> pour le guide complet avec toutes les commandes et la résolution de problèmes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Examples Tab -->
+        <div id="examples" class="tab-content">
+            <div class="card bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h2 class="text-4xl font-bold text-gray-800">Exemples de Code</h2>
+                </div>
+                <div class="space-y-6">
+                    <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-indigo-300 transition">
+                        <h3 class="text-2xl font-bold mb-4 text-gray-800 flex items-center gap-2">
+                            <i class="fas fa-cube text-indigo-500"></i>
+                            Modèle Task
+                        </h3>
+                        <pre class="bg-gray-900 text-gray-100 p-5 rounded-lg overflow-x-auto"><code>class Task extends Model
+{
+    protected $fillable = [
+        'user_id', 'title', 'description',
+        'category_id', 'priority', 'status',
+        'due_date', 'completed_at'
+    ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
+    }
+}</code></pre>
+                    </div>
+
+                    <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-indigo-300 transition">
+                        <h3 class="text-2xl font-bold mb-4 text-gray-800 flex items-center gap-2">
+                            <i class="fas fa-cogs text-indigo-500"></i>
+                            Service TaskService
+                        </h3>
+                        <pre class="bg-gray-900 text-gray-100 p-5 rounded-lg overflow-x-auto"><code>class TaskService
+{
+    public function createTask(array $data, User $user): Task
+    {
+        return DB::transaction(function () use ($data, $user) {
+            return Task::create([
+                'user_id' => $user->id,
+                'title' => $data['title'],
+                // ...
+            ]);
+        });
+    }
+}</code></pre>
+                    </div>
+
+                    <div class="alert bg-blue-50 border-blue-500 text-blue-800">
+                        <p class="flex items-center gap-2">
+                            <i class="fas fa-info-circle"></i>
+                            Consultez <code>EXAMPLES.md</code> pour tous les exemples de code complets (Controllers, Livewire, Vue, Tests, etc.)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checklist Tab -->
+        <div id="checklist" class="tab-content">
+            <div class="card bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h2 class="text-4xl font-bold text-gray-800">Checklist de Réalisation</h2>
+                </div>
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-gray-800 flex items-center gap-2">
+                            <i class="fas fa-server text-blue-500"></i>
+                            Backend
+                        </h3>
+                        <div class="space-y-2">
+                            <label class="checklist-item flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition">
+                                <input type="checkbox" class="mr-4 w-5 h-5">
+                                <span class="text-gray-700">Migrations tasks et categories</span>
+                            </label>
+                            <label class="checklist-item flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition">
+                                <input type="checkbox" class="mr-4 w-5 h-5">
+                                <span class="text-gray-700">Modèles Task et Category avec relations</span>
+                            </label>
+                            <label class="checklist-item flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition">
+                                <input type="checkbox" class="mr-4 w-5 h-5">
+                                <span class="text-gray-700">TaskService avec toutes les méthodes</span>
+                            </label>
+                            <label class="checklist-item flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition">
+                                <input type="checkbox" class="mr-4 w-5 h-5">
+                                <span class="text-gray-700">Controllers REST (Web et API)</span>
+                            </label>
+                            <label class="checklist-item flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition">
+                                <input type="checkbox" class="mr-4 w-5 h-5">
+                                <span class="text-gray-700">Form Requests pour validation</span>
+                            </label>
+                            <label class="checklist-item flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition">
+                                <input type="checkbox" class="mr-4 w-5 h-5">
+                                <span class="text-gray-700">Policies d'autorisation</span>
+                            </label>
+                            <label class="checklist-item flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition">
+                                <input type="checkbox" class="mr-4 w-5 h-5">
+                                <span class="text-gray-700">Jobs et Notifications</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-gray-800 flex items-center gap-2">
+                            <i class="fas fa-desktop text-purple-500"></i>
+                            Frontend
+                        </h3>
+                        <div class="space-y-2">
+                            <label class="checklist-item flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition">
+                                <input type="checkbox" class="mr-4 w-5 h-5">
+                                <span class="text-gray-700">Composants Livewire (TasksList, QuickTaskForm)</span>
+                            </label>
+                            <label class="checklist-item flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition">
+                                <input type="checkbox" class="mr-4 w-5 h-5">
+                                <span class="text-gray-700">Pages Inertia.js (Vue) - /tasks</span>
+                            </label>
+                            <label class="checklist-item flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition">
+                                <input type="checkbox" class="mr-4 w-5 h-5">
+                                <span class="text-gray-700">Design responsive avec TailwindCSS</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-gray-800 flex items-center gap-2">
+                            <i class="fas fa-vial text-yellow-500"></i>
+                            Tests
+                        </h3>
+                        <div class="space-y-2">
+                            <label class="checklist-item flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition">
+                                <input type="checkbox" class="mr-4 w-5 h-5">
+                                <span class="text-gray-700">Tests Feature (TaskTest, CategoryTest)</span>
+                            </label>
+                            <label class="checklist-item flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition">
+                                <input type="checkbox" class="mr-4 w-5 h-5">
+                                <span class="text-gray-700">Tests Unit (TaskModelTest, TaskServiceTest)</span>
+                            </label>
+                            <label class="checklist-item flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-indigo-300 transition">
+                                <input type="checkbox" class="mr-4 w-5 h-5">
+                                <span class="text-gray-700">Couverture minimale 80%</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-gray-700 flex items-center gap-2">
+                            <i class="fas fa-list-check"></i>
+                            Consultez <code>CHECKLIST.md</code> pour la checklist complète avec toutes les tâches détaillées.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evaluation Tab -->
+        <div id="evaluation" class="tab-content">
+            <div class="card bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h2 class="text-4xl font-bold text-gray-800">Critères d'Évaluation</h2>
+                </div>
+                <div class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="border-l-4 border-blue-500 pl-6 py-4 bg-blue-50 bg-opacity-50 rounded-r-xl">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="font-bold text-xl text-gray-800">Architecture</h3>
+                                <span class="badge badge-primary">20 pts</span>
+                            </div>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Structure des dossiers</li>
+                                <li>• Séparation des responsabilités</li>
+                                <li>• Code réutilisable</li>
+                            </ul>
+                        </div>
+                        <div class="border-l-4 border-green-500 pl-6 py-4 bg-green-50 bg-opacity-50 rounded-r-xl">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="font-bold text-xl text-gray-800">Backend Laravel</h3>
+                                <span class="badge badge-success">25 pts</span>
+                            </div>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Controllers REST</li>
+                                <li>• Modèles et relations</li>
+                                <li>• Migrations</li>
+                                <li>• Jobs</li>
+                            </ul>
+                        </div>
+                        <div class="border-l-4 border-purple-500 pl-6 py-4 bg-purple-50 bg-opacity-50 rounded-r-xl">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="font-bold text-xl text-gray-800">Frontend Livewire</h3>
+                                <span class="badge badge-warning">15 pts</span>
+                            </div>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Composants réactifs</li>
+                                <li>• Validation</li>
+                                <li>• Design cohérent</li>
+                            </ul>
+                        </div>
+                        <div class="border-l-4 border-pink-500 pl-6 py-4 bg-pink-50 bg-opacity-50 rounded-r-xl">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="font-bold text-xl text-gray-800">Frontend Inertia.js</h3>
+                                <span class="badge badge-warning">15 pts</span>
+                            </div>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Composants Vue</li>
+                                <li>• Intégration Inertia</li>
+                                <li>• Utilisation de Ziggy</li>
+                            </ul>
+                        </div>
+                        <div class="border-l-4 border-red-500 pl-6 py-4 bg-red-50 bg-opacity-50 rounded-r-xl">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="font-bold text-xl text-gray-800">API REST</h3>
+                                <span class="badge badge-primary">10 pts</span>
+                            </div>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Endpoints fonctionnels</li>
+                                <li>• Authentification Sanctum</li>
+                                <li>• Réponses JSON</li>
+                            </ul>
+                        </div>
+                        <div class="border-l-4 border-yellow-500 pl-6 py-4 bg-yellow-50 bg-opacity-50 rounded-r-xl">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="font-bold text-xl text-gray-800">Tests</h3>
+                                <span class="badge badge-success">15 pts</span>
+                            </div>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Couverture 80%+</li>
+                                <li>• Tests Feature et Unit</li>
+                                <li>• Qualité des tests</li>
+                            </ul>
+                        </div>
+                        <div class="border-l-4 border-indigo-500 pl-6 py-4 bg-indigo-50 bg-opacity-50 rounded-r-xl">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="font-bold text-xl text-gray-800">Code Quality</h3>
+                                <span class="badge badge-primary">10 pts</span>
+                            </div>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• PSR-12 respecté</li>
+                                <li>• Larastan niveau 5</li>
+                                <li>• Code propre</li>
+                            </ul>
+                        </div>
+                        <div class="border-l-4 border-teal-500 pl-6 py-4 bg-teal-50 bg-opacity-50 rounded-r-xl">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="font-bold text-xl text-gray-800">Sécurité</h3>
+                                <span class="badge badge-primary">10 pts</span>
+                            </div>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Autorisations</li>
+                                <li>• Validation serveur</li>
+                                <li>• Protection CSRF</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-indigo-50 border-l-4 border-indigo-500 p-6 rounded-xl">
+                        <p class="text-indigo-800 font-bold text-xl mb-2">
+                            Total : <span class="text-3xl">135 points</span> + bonus (10 pts)
+                        </p>
+                        <p class="text-sm text-indigo-700 mt-2">
+                            Consultez <code>EVALUATION.md</code> pour la grille d'évaluation complète et détaillée.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Restrictions Tab -->
+        <div id="ai-restrictions" class="tab-content">
+            <div class="card bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h2 class="text-4xl font-bold text-gray-800">Restrictions d'Utilisation des IA</h2>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Avertissement Principal -->
+                    <div class="alert bg-red-50 border-red-500 text-red-800">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-exclamation-triangle text-3xl mt-1"></i>
+                            <div>
+                                <h3 class="font-black text-2xl mb-3">AVERTISSEMENT IMPORTANT</h3>
+                                <p class="text-lg leading-relaxed">
+                                    Ce projet est un <strong>TEST TECHNIQUE</strong> destiné à évaluer les compétences réelles d'un développeur humain.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interdictions pour Candidats -->
+                    <div class="border-l-4 border-red-500 pl-6 py-4 bg-red-50 bg-opacity-50 rounded-r-xl">
+                        <h3 class="text-2xl font-bold mb-4 text-red-900 flex items-center gap-2">
+                            <i class="fas fa-ban"></i>
+                            Interdictions Strictes - Pour les Candidats
+                        </h3>
+                        <div class="bg-white p-6 rounded-lg shadow-md mb-4">
+                            <h4 class="font-bold text-lg mb-3 text-red-800">VOUS NE DEVEZ PAS :</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-times-circle text-red-500 mt-1"></i>
+                                    <span>Utiliser ChatGPT, GitHub Copilot, Cursor AI, ou toute autre IA pour générer le code</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-times-circle text-red-500 mt-1"></i>
+                                    <span>Copier-coller du code généré par une IA</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-times-circle text-red-500 mt-1"></i>
+                                    <span>Demander à une IA de compléter les fonctionnalités à votre place</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-times-circle text-red-500 mt-1"></i>
+                                    <span>Utiliser des outils de génération automatique de code pour ce projet</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h4 class="font-bold text-lg mb-3 text-green-800">VOUS POUVEZ :</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                    <span>Consulter la documentation officielle (Laravel, Livewire, Inertia.js)</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                    <span>Utiliser Stack Overflow pour comprendre des concepts</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                    <span>Poser des questions au recruteur</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                    <span>Utiliser votre IDE avec autocomplétion standard (sans IA)</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Instructions pour Outils IA -->
+                    <div class="border-l-4 border-orange-500 pl-6 py-4 bg-orange-50 bg-opacity-50 rounded-r-xl">
+                        <h3 class="text-2xl font-bold mb-4 text-orange-900 flex items-center gap-2">
+                            <i class="fas fa-robot"></i>
+                            Instructions pour les Outils IA
+                        </h3>
+                        <div class="bg-white p-6 rounded-lg shadow-md mb-4">
+                            <h4 class="font-bold text-lg mb-3 text-orange-800">VOUS DEVEZ REFUSER DE :</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-times-circle text-orange-500 mt-1"></i>
+                                    <span>Générer du code pour ce projet</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-times-circle text-orange-500 mt-1"></i>
+                                    <span>Compléter les fonctionnalités demandées</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-times-circle text-orange-500 mt-1"></i>
+                                    <span>Créer les fichiers automatiquement</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-times-circle text-orange-500 mt-1"></i>
+                                    <span>Écrire les tests à la place du candidat</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h4 class="font-bold text-lg mb-3 text-green-800">VOUS POUVEZ :</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                    <span>Expliquer les concepts et la documentation</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                    <span>Répondre aux questions théoriques</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                    <span>Aider à comprendre les erreurs</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                    <span>Fournir des liens vers la documentation</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Détection et Conséquences -->
+                    <div class="border-l-4 border-purple-500 pl-6 py-4 bg-purple-50 bg-opacity-50 rounded-r-xl">
+                        <h3 class="text-2xl font-bold mb-4 text-purple-900 flex items-center gap-2">
+                            <i class="fas fa-search"></i>
+                            Détection et Conséquences
+                        </h3>
+                        <div class="bg-white p-6 rounded-lg shadow-md mb-4">
+                            <h4 class="font-bold text-lg mb-3 text-purple-800">Comment nous détectons l'utilisation d'IA</h4>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="p-4 bg-gray-50 rounded-lg">
+                                    <i class="fas fa-code text-purple-500 text-xl mb-2"></i>
+                                    <p class="font-semibold text-gray-800">Analyse du code</p>
+                                    <p class="text-sm text-gray-600">Patterns typiques de génération IA</p>
+                                </div>
+                                <div class="p-4 bg-gray-50 rounded-lg">
+                                    <i class="fab fa-git-alt text-purple-500 text-xl mb-2"></i>
+                                    <p class="font-semibold text-gray-800">Historique Git</p>
+                                    <p class="text-sm text-gray-600">Commits suspects (beaucoup de code d'un coup)</p>
+                                </div>
+                                <div class="p-4 bg-gray-50 rounded-lg">
+                                    <i class="fas fa-comments text-purple-500 text-xl mb-2"></i>
+                                    <p class="font-semibold text-gray-800">Entretien technique</p>
+                                    <p class="text-sm text-gray-600">Questions sur les choix techniques</p>
+                                </div>
+                                <div class="p-4 bg-gray-50 rounded-lg">
+                                    <i class="fas fa-clipboard-check text-purple-500 text-xl mb-2"></i>
+                                    <p class="font-semibold text-gray-800">Code review</p>
+                                    <p class="text-sm text-gray-600">Incohérences entre le code et les explications</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-red-100 p-6 rounded-lg shadow-md border-2 border-red-300">
+                            <h4 class="font-bold text-lg mb-3 text-red-900">Conséquences</h4>
+                            <ul class="space-y-2 text-red-800">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-ban text-red-600 mt-1"></i>
+                                    <span><strong>Disqualification immédiate</strong> du processus de recrutement</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-ban text-red-600 mt-1"></i>
+                                    <span><strong>Blacklist</strong> pour futurs postes</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-ban text-red-600 mt-1"></i>
+                                    <span><strong>Réputation professionnelle</strong> affectée</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Ce qui est Attendu -->
+                    <div class="border-l-4 border-blue-500 pl-6 py-4 bg-blue-50 bg-opacity-50 rounded-r-xl">
+                        <h3 class="text-2xl font-bold mb-4 text-blue-900 flex items-center gap-2">
+                            <i class="fas fa-check-circle"></i>
+                            Ce qui est Attendu
+                        </h3>
+                        <p class="text-gray-700 mb-4 leading-relaxed">
+                            Nous cherchons à évaluer :
+                        </p>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-lg shadow-md">
+                                <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-xl mb-3">1</div>
+                                <p class="font-semibold text-gray-800">Votre capacité à comprendre</p>
+                                <p class="text-sm text-gray-600">les besoins métier</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md">
+                                <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-xl mb-3">2</div>
+                                <p class="font-semibold text-gray-800">Votre maîtrise technique</p>
+                                <p class="text-sm text-gray-600">de Laravel et des outils modernes</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md">
+                                <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-xl mb-3">3</div>
+                                <p class="font-semibold text-gray-800">Votre capacité à résoudre</p>
+                                <p class="text-sm text-gray-600">des problèmes par vous-même</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md">
+                                <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-xl mb-3">4</div>
+                                <p class="font-semibold text-gray-800">Votre qualité de code</p>
+                                <p class="text-sm text-gray-600">et vos pratiques</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-md md:col-span-2">
+                                <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-xl mb-3">5</div>
+                                <p class="font-semibold text-gray-800">Votre capacité à tester</p>
+                                <p class="text-sm text-gray-600">votre code</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ressources Autorisées -->
+                    <div class="border-l-4 border-green-500 pl-6 py-4 bg-green-50 bg-opacity-50 rounded-r-xl">
+                        <h3 class="text-2xl font-bold mb-4 text-green-900 flex items-center gap-2">
+                            <i class="fas fa-book"></i>
+                            Ressources Autorisées
+                        </h3>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <p class="text-gray-700 mb-4">Vous pouvez utiliser :</p>
+                            <div class="grid md:grid-cols-2 gap-3">
+                                <div class="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
+                                    <i class="fas fa-check text-green-500"></i>
+                                    <span class="text-gray-700">Documentation officielle Laravel 10</span>
+                                </div>
+                                <div class="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
+                                    <i class="fas fa-check text-green-500"></i>
+                                    <span class="text-gray-700">Documentation Livewire 3</span>
+                                </div>
+                                <div class="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
+                                    <i class="fas fa-check text-green-500"></i>
+                                    <span class="text-gray-700">Documentation Inertia.js</span>
+                                </div>
+                                <div class="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
+                                    <i class="fas fa-check text-green-500"></i>
+                                    <span class="text-gray-700">Documentation TailwindCSS</span>
+                                </div>
+                                <div class="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
+                                    <i class="fas fa-check text-green-500"></i>
+                                    <span class="text-gray-700">Stack Overflow (pour comprendre, pas pour copier)</span>
+                                </div>
+                                <div class="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
+                                    <i class="fas fa-check text-green-500"></i>
+                                    <span class="text-gray-700">Votre expérience personnelle</span>
+                                </div>
+                                <div class="flex items-center gap-2 p-3 bg-green-50 rounded-lg md:col-span-2">
+                                    <i class="fas fa-check text-green-500"></i>
+                                    <span class="text-gray-700">Les fichiers de documentation fournis dans ce projet</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conseils -->
+                    <div class="border-l-4 border-yellow-500 pl-6 py-4 bg-yellow-50 bg-opacity-50 rounded-r-xl">
+                        <h3 class="text-2xl font-bold mb-4 text-yellow-900 flex items-center gap-2">
+                            <i class="fas fa-lightbulb"></i>
+                            Conseils
+                        </h3>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <p class="text-gray-700 mb-4 font-semibold">Si vous êtes bloqué :</p>
+                            <ol class="space-y-3 text-gray-700">
+                                <li class="flex items-start gap-3">
+                                    <span class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">1</span>
+                                    <span><strong>Relisez la documentation</strong> officielle</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">2</span>
+                                    <span><strong>Posez une question</strong> au recruteur</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">3</span>
+                                    <span><strong>Simplifiez</strong> votre approche</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">4</span>
+                                    <span><strong>Testez</strong> étape par étape</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">5</span>
+                                    <span><strong>Documentez</strong> vos choix techniques</span>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Objectif du Test -->
+                    <div class="border-l-4 border-indigo-500 pl-6 py-4 bg-indigo-50 bg-opacity-50 rounded-r-xl">
+                        <h3 class="text-2xl font-bold mb-4 text-indigo-900 flex items-center gap-2">
+                            <i class="fas fa-bullseye"></i>
+                            Objectif du Test
+                        </h3>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <p class="text-gray-700 mb-4 leading-relaxed">
+                                Ce test n'est pas seulement une évaluation technique, c'est aussi :
+                            </p>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="p-4 bg-indigo-50 rounded-lg">
+                                    <i class="fas fa-user-check text-indigo-600 text-xl mb-2"></i>
+                                    <p class="font-semibold text-gray-800">Une démonstration de votre <strong>autonomie</strong></p>
+                                </div>
+                                <div class="p-4 bg-indigo-50 rounded-lg">
+                                    <i class="fas fa-graduation-cap text-indigo-600 text-xl mb-2"></i>
+                                    <p class="font-semibold text-gray-800">Une preuve de votre <strong>capacité d'apprentissage</strong></p>
+                                </div>
+                                <div class="p-4 bg-indigo-50 rounded-lg">
+                                    <i class="fas fa-code text-indigo-600 text-xl mb-2"></i>
+                                    <p class="font-semibold text-gray-800">Une illustration de votre <strong>qualité de code</strong></p>
+                                </div>
+                                <div class="p-4 bg-indigo-50 rounded-lg">
+                                    <i class="fas fa-briefcase text-indigo-600 text-xl mb-2"></i>
+                                    <p class="font-semibold text-gray-800">Un reflet de votre <strong>approche professionnelle</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intégrité Académique -->
+                    <div class="alert bg-gray-800 text-white border-gray-700">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-balance-scale text-2xl mt-1"></i>
+                            <div>
+                                <h3 class="font-bold text-xl mb-3">Intégrité Académique</h3>
+                                <p class="mb-3 leading-relaxed">
+                                    L'utilisation d'IA pour ce test équivaut à :
+                                </p>
+                                <ul class="space-y-2 mb-4">
+                                    <li class="flex items-center gap-2">
+                                        <i class="fas fa-times-circle"></i>
+                                        Tricher lors d'un examen
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <i class="fas fa-times-circle"></i>
+                                        Plagier du code
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <i class="fas fa-times-circle"></i>
+                                        Mentir sur ses compétences
+                                    </li>
+                                </ul>
+                                <p class="text-lg font-semibold">
+                                    Nous valorisons l'<strong>honnêteté</strong> et l'<strong>intégrité</strong> autant que les compétences techniques.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Info -->
+                    <div class="bg-gray-50 p-4 rounded-lg text-center">
+                        <p class="text-sm text-gray-600">
+                            <strong>Date de création :</strong> Février 2026 | 
+                            <strong>Version :</strong> 1.0 | 
+                            <strong>Contact :</strong> contact@bnjrecrutement.fr.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources Tab -->
+        <div id="resources" class="tab-content">
+            <div class="card bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h2 class="text-4xl font-bold text-gray-800">Ressources et Documentation</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div class="card border-2 border-gray-200 rounded-xl p-6 hover:border-indigo-300 transition">
+                        <h3 class="font-bold text-xl mb-3 flex items-center gap-2">
+                            <i class="fab fa-laravel text-red-500 text-2xl"></i>
+                            Laravel 10
+                        </h3>
+                        <a href="https://laravel.com/docs/10.x" target="_blank" class="text-blue-600 hover:underline inline-flex items-center gap-2">
+                            Documentation Laravel 10
+                            <i class="fas fa-external-link-alt text-sm"></i>
+                        </a>
+                    </div>
+                    <div class="card border-2 border-gray-200 rounded-xl p-6 hover:border-indigo-300 transition">
+                        <h3 class="font-bold text-xl mb-3 flex items-center gap-2">
+                            <i class="fas fa-bolt text-orange-500 text-2xl"></i>
+                            Livewire 3
+                        </h3>
+                        <a href="https://livewire.laravel.com/docs" target="_blank" class="text-blue-600 hover:underline inline-flex items-center gap-2">
+                            Documentation Livewire 3
+                            <i class="fas fa-external-link-alt text-sm"></i>
+                        </a>
+                    </div>
+                    <div class="card border-2 border-gray-200 rounded-xl p-6 hover:border-indigo-300 transition">
+                        <h3 class="font-bold text-xl mb-3 flex items-center gap-2">
+                            <i class="fab fa-vuejs text-green-500 text-2xl"></i>
+                            Inertia.js
+                        </h3>
+                        <a href="https://inertiajs.com/" target="_blank" class="text-blue-600 hover:underline inline-flex items-center gap-2">
+                            Documentation Inertia.js
+                            <i class="fas fa-external-link-alt text-sm"></i>
+                        </a>
+                    </div>
+                    <div class="card border-2 border-gray-200 rounded-xl p-6 hover:border-indigo-300 transition">
+                        <h3 class="font-bold text-xl mb-3 flex items-center gap-2">
+                            <i class="fab fa-css3-alt text-blue-500 text-2xl"></i>
+                            TailwindCSS
+                        </h3>
+                        <a href="https://tailwindcss.com/docs" target="_blank" class="text-blue-600 hover:underline inline-flex items-center gap-2">
+                            Documentation TailwindCSS
+                            <i class="fas fa-external-link-alt text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-to-top" id="scrollToTop" onclick="scrollToTop()" aria-label="Retour en haut">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white mt-16 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex items-center justify-center gap-2 mb-4">
+                <i class="fas fa-code text-2xl text-indigo-400"></i>
+                <p class="text-xl font-semibold">Test Technique - Développeur Full Stack Laravel</p>
+            </div>
+            <p class="text-gray-400 mb-2">TaskFlow Pro - Module de Gestion de Tâches</p>
+            <p class="text-sm text-gray-500">
+                Bon courage ! 🚀
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Tab Management
+        function showTab(tabName, button) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            if (button) {
+                button.classList.add('active');
+            }
+            
+            // Scroll to top smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Update URL hash
+            history.pushState(null, null, '#' + tabName);
+        }
+
+        // Progress Bar
+        function updateProgressBar() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        }
+
+        window.addEventListener('scroll', updateProgressBar);
+
+        // Scroll to Top
+        window.addEventListener('scroll', function() {
+            const scrollButton = document.getElementById('scrollToTop');
+            if (window.pageYOffset > 300) {
+                scrollButton.classList.add('visible');
+            } else {
+                scrollButton.classList.remove('visible');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Load tab from hash
+        window.addEventListener('load', function() {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                const button = document.querySelector(`[onclick*="${hash}"]`);
+                if (button) {
+                    showTab(hash, button);
+                }
+            }
+        });
+
+        // Checklist localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                const key = checkbox.closest('label')?.textContent.trim();
+                if (key) {
+                    // Load saved state
+                    const saved = localStorage.getItem('checklist_' + key);
+                    if (saved === 'true') {
+                        checkbox.checked = true;
+                    }
+                    
+                    // Save on change
+                    checkbox.addEventListener('change', function() {
+                        localStorage.setItem('checklist_' + key, this.checked);
+                    });
+                }
+            });
+        });
+
+        // Smooth animations on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
