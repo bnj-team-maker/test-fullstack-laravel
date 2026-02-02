@@ -26,19 +26,12 @@ Développer un **nouveau module de gestion de tâches** moderne qui permettra :
 - De supporter 10 000 utilisateurs simultanés
 - De réduire le temps de chargement à moins de 1 seconde
 
-### Contexte de Développement
-
-Vous travaillez en équipe avec un Product Manager, un Designer UX, et un Lead Developer. Vous avez accès aux maquettes Figma et à la documentation de l'API existante.
-
-**Consultez [PROJECT_SCENARIO.md](./PROJECT_SCENARIO.md) pour le scénario complet du projet.**
-
 ### ⚠️ Important - Restrictions IA
 
 **Ce test technique est conçu pour évaluer vos compétences réelles.** 
 
 **L'utilisation d'IA (ChatGPT, Copilot, Cursor AI, etc.) pour générer le code est STRICTEMENT INTERDITE** et entraînera une disqualification immédiate.
 
-Consultez [AI_RESTRICTIONS.md](./AI_RESTRICTIONS.md) pour plus de détails.
 
 ## 🛠️ Stack Technique Requise
 
@@ -88,7 +81,7 @@ Consultez [AI_RESTRICTIONS.md](./AI_RESTRICTIONS.md) pour plus de détails.
 
 ## 📝 Tâches à Réaliser
 
-Consultez le fichier [SPECIFICATIONS.md](./SPECIFICATIONS.md) pour les détails complets des fonctionnalités à implémenter.
+Consultez la doc du index.html pour les détails complets des fonctionnalités à implémenter.
 
 **Contexte métier :** Vous développez le MVP (Minimum Viable Product) qui sera déployé en production dans 6 semaines. Le code doit être de qualité production, testé, et maintenable.
 
@@ -117,7 +110,7 @@ Consultez le fichier [SPECIFICATIONS.md](./SPECIFICATIONS.md) pour les détails 
 
 ## ✅ Critères d'Évaluation
 
-Consultez le fichier [EVALUATION.md](./EVALUATION.md) pour les critères détaillés.
+Consultez l'index.html pour les critères détaillés.
 
 ### Points Clés
 
